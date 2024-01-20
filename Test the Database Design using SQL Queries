@@ -1,10 +1,5 @@
-**Test the Database Design using SQL Queries:**
 
-I formulated SQL code for JOIN queries to test table relationships. Also, I created complex queries
-joining all tables together in one query and I developed three business questions, each requiring 
-data retrieval from multiple tables which are as follows:
-
-**Query 1: Joining Tables**
+Query 1: Joining Tables
 
 Retrieve all purchases with associated vendor information:
 
