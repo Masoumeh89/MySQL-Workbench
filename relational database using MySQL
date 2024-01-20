@@ -1,2 +1,148 @@
+**MySQL Workbench Forward Engineering**
+
+
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema greenspot
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema greenspot
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `greenspot` DEFAULT CHARACTER SET utf8mb3 ;
+USE `greenspot` ;
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`customers`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`customers` (
+  `cust_id` INT NOT NULL,
+  `cust_name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`cust_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`itemtypes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`itemtypes` (
+  `item_type_id` INT NOT NULL,
+  `item_type_name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`item_type_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`locations`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`locations` (
+  `location_id` INT NOT NULL,
+  `location_name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`location_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`units`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`units` (
+  `unit_id` INT NOT NULL,
+  `unit_name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`unit_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`products`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`products` (
+  `item_num` INT NOT NULL,
+  `description` VARCHAR(200) NULL DEFAULT NULL,
+  `quantity_on_hand` INT NULL DEFAULT NULL,
+  `cost` DECIMAL(10,2) NULL DEFAULT NULL,
+  `unit_id` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`item_num`),
+  INDEX `FK_unit_id` (`unit_id` ASC) VISIBLE,
+  CONSTRAINT `FK_unit_id`
+    FOREIGN KEY (`unit_id`)
+    REFERENCES `greenspot`.`units` (`unit_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`vendors`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`vendors` (
+  `vendor_id` INT NOT NULL,
+  `vendor_name` VARCHAR(100) NULL DEFAULT NULL,
+  `vendor_address` VARCHAR(150) NULL DEFAULT NULL,
+  PRIMARY KEY (`vendor_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`purchases`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`purchases` (
+  `purchase_id` INT NOT NULL,
+  `item_num` INT NULL DEFAULT NULL,
+  `vendor_id` INT NULL DEFAULT NULL,
+  `purchase_date` DATE NULL DEFAULT NULL,
+  `price` DECIMAL(10,2) NULL DEFAULT NULL,
+  PRIMARY KEY (`purchase_id`),
+  INDEX `FK_item_num` (`item_num` ASC) VISIBLE,
+  INDEX `FK_vendor_id` (`vendor_id` ASC) VISIBLE,
+  CONSTRAINT `FK_item_num`
+    FOREIGN KEY (`item_num`)
+    REFERENCES `greenspot`.`products` (`item_num`),
+  CONSTRAINT `FK_vendor_id`
+    FOREIGN KEY (`vendor_id`)
+    REFERENCES `greenspot`.`vendors` (`vendor_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `greenspot`.`sales`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `greenspot`.`sales` (
+  `sale_id` INT NOT NULL,
+  `item_num` INT NULL DEFAULT NULL,
+  `cust_id` INT NULL DEFAULT NULL,
+  `date_sold` DATE NULL DEFAULT NULL,
+  `quantity_sold` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`sale_id`),
+  INDEX `FK_sale_item_num` (`item_num` ASC) VISIBLE,
+  INDEX `FK_cust_id` (`cust_id` ASC) VISIBLE,
+  CONSTRAINT `FK_cust_id`
+    FOREIGN KEY (`cust_id`)
+    REFERENCES `greenspot`.`customers` (`cust_id`),
+  CONSTRAINT `FK_sale_item_num`
+    FOREIGN KEY (`item_num`)
+    REFERENCES `greenspot`.`products` (`item_num`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
 
 
